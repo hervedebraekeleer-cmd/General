@@ -25,7 +25,7 @@ header h2{flex:1;color:var(--p);font-size:1.6rem}
 .stage{flex:1;display:flex;gap:14px;min-height:0}
 #board{position:relative;background:#fff;border-radius:20px;box-shadow:0 5px 0 #e0d5f7;overflow:hidden;flex:none}
 #board svg,#board canvas{position:absolute;inset:0;width:100%;height:100%}
-#pad{touch-action:none}
+#pad{touch-action:none}#fillc{pointer-events:none}
 #guide path{fill:none;stroke-linecap:round;stroke-linejoin:round}
 #guide .done{stroke:#cfcfe0;stroke-width:1.5;opacity:.7}
 #guide .now{stroke-width:1.9;stroke-dasharray:3 3;animation:dash 1s linear infinite}

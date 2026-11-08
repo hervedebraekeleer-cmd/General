@@ -1,5 +1,5 @@
 // Knipt een tekening (foto of canvas) uit het papier: achtergrond -> transparant.
-function makeSprite(img,{sens=5,crop=0.03,max=640}={}){
+function makeSprite(img,{sens=5,crop=0.03,max=640,flat=false}={}){
   const sw=img.naturalWidth||img.width,sh=img.naturalHeight||img.height;
   const cx=Math.round(sw*crop),cy=Math.round(sh*crop),cw=sw-2*cx,ch=sh-2*cy;
   const k=Math.min(1,max/Math.max(cw,ch));
@@ -16,6 +16,7 @@ function makeSprite(img,{sens=5,crop=0.03,max=640}={}){
     const v=[];for(let y=gy*cell;y<Math.min(H,(gy+1)*cell);y+=2)for(let xx=gx*cell;xx<Math.min(W,(gx+1)*cell);xx+=2)v.push(lum[y*W+xx]);
     v.sort((a,b)=>a-b);g[gy*gw+gx]=v[Math.floor(v.length*.85)]||255;}
   const filt=(src,fn)=>{const o=new Float32Array(src.length);for(let y=0;y<gh;y++)for(let xx=0;xx<gw;xx++){const a=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const yy=Math.min(gh-1,Math.max(0,y+dy)),x2=Math.min(gw-1,Math.max(0,xx+dx));a.push(src[yy*gw+x2])}o[y*gw+xx]=fn(a)}return o};
+  if(flat)g.fill(255);
   g=filt(g,a=>Math.max(...a));g=filt(g,a=>a.reduce((s,v)=>s+v,0)/9);
   const thr=.30-.024*sens;
   const bgAt=new Float32Array(N),ink=new Uint8Array(N);

@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s);
 const COLORS=['#e53935','#fb8c00','#fdd835','#43a047','#1e88e5','#8e24aa','#ec407a','#6d4c41','#212121'];
-let animal=null,step=0,strokes=[],curStroke=null,color=COLORS[0],size=16,erase=false,voice=true,penSeen=false,sprite=null,spriteScene='sea',photoImg=null;
-const pad=$('#pad'),pc=pad.getContext('2d'),anim=new Anim($('#stageCv'));
+let fillMode=false,animal=null,step=0,strokes=[],curStroke=null,color=COLORS[0],size=16,erase=false,voice=true,penSeen=false,sprite=null,spriteScene='sea',photoImg=null;
+const pad=$('#pad'),pc=pad.getContext('2d'),fillc=$('#fillc'),fc=fillc.getContext('2d',{willReadFrequently:true}),anim=new Anim($('#stageCv'));
 
 function show(id){document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('active',e.id===id));if(id!=='anim')anim.stop();requestAnimationFrame(fit)}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
@@ -44,18 +44,32 @@ $('#drawBack').onclick=()=>{try{speechSynthesis.cancel()}catch(e){}if(!strokes.l
 
 $('#palette').innerHTML=COLORS.map((c,i)=>`<button style="background:${c}" data-c="${c}" class="${i?'':'sel'}"></button>`).join('');
 $('#palette').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;color=b.dataset.c;erase=false;mark()};
-document.querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{size=+b.dataset.size;mark()});
-$('#eraser').onclick=()=>{erase=!erase;mark()};
+document.querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{size=+b.dataset.size;fillMode=false;mark()});
+$('#eraser').onclick=()=>{erase=!erase;fillMode=false;mark()};
+$('#bucket').onclick=()=>{fillMode=!fillMode;erase=false;mark();if(fillMode)toast('Tik op een vak om te kleuren 🪣')};
 $('#undo').onclick=()=>{strokes.pop();redraw()};
 $('#clear').onclick=()=>{if(strokes.length&&confirm('Alles wissen?')){strokes=[];redraw()}};
 function mark(){document.querySelectorAll('#palette button').forEach(b=>b.classList.toggle('sel',!erase&&b.dataset.c===color));
-  document.querySelectorAll('[data-size]').forEach(b=>b.classList.toggle('sel',+b.dataset.size===size));$('#eraser').classList.toggle('sel',erase)}
+  document.querySelectorAll('[data-size]').forEach(b=>b.classList.toggle('sel',!fillMode&&!erase&&+b.dataset.size===size));$('#eraser').classList.toggle('sel',erase);$('#bucket').classList.toggle('sel',fillMode)}
 
 function drawStroke(s){pc.globalCompositeOperation=s.erase?'destination-out':'source-over';pc.strokeStyle=pc.fillStyle=s.color;pc.lineWidth=s.size;pc.lineCap=pc.lineJoin='round';
   const p=s.pts;if(p.length==1){pc.beginPath();pc.arc(p[0].x,p[0].y,s.size/2,0,7);pc.fill();return}pc.beginPath();pc.moveTo(p[0].x,p[0].y);for(let i=1;i<p.length;i++)pc.lineTo(p[i].x,p[i].y);pc.stroke()}
-function redraw(){pc.globalCompositeOperation='source-over';pc.clearRect(0,0,1000,1000);strokes.forEach(drawStroke)}
+function redraw(){pc.globalCompositeOperation='source-over';pc.clearRect(0,0,1000,1000);fc.clearRect(0,0,1000,1000);strokes.forEach(s=>s.fill?doFill(s):drawStroke(s))}
+function doFill(f){const N=1000,bar=document.createElement('canvas');bar.width=bar.height=N;const bc=bar.getContext('2d',{willReadFrequently:true});
+  bc.drawImage(pad,0,0);if(animal){bc.setTransform(8.8,0,0,8.8,60,60);bc.lineWidth=2.4;bc.lineCap=bc.lineJoin='round';bc.strokeStyle='#000';for(let i=0;i<=f.step;i++)animal.steps[i].p.forEach(d=>bc.stroke(new Path2D(d)))}
+  const bd=bc.getImageData(0,0,N,N).data,wall=new Uint8Array(N*N);for(let i=0;i<N*N;i++)wall[i]=bd[4*i+3]>20;
+  const x0=Math.round(f.x),y0=Math.round(f.y);if(x0<0||y0<0||x0>=N||y0>=N||wall[y0*N+x0])return;
+  const m=new Uint8Array(N*N),st=new Int32Array(N*N);let sp=0;st[sp++]=y0*N+x0;m[y0*N+x0]=1;
+  while(sp){const i=st[--sp],x=i%N;for(const j of[x>0?i-1:-1,x<N-1?i+1:-1,i>=N?i-N:-1,i<N*N-N?i+N:-1])if(j>=0&&!m[j]&&!wall[j]){m[j]=1;st[sp++]=j}}
+  const r=3,t=new Uint8Array(N*N),o=new Uint8Array(N*N);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){let v=0;for(let k=Math.max(0,x-r);k<=Math.min(N-1,x+r);k++)if(m[y*N+k]){v=1;break}t[y*N+x]=v}
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){let v=0;for(let k=Math.max(0,y-r);k<=Math.min(N-1,y+r);k++)if(t[k*N+x]){v=1;break}o[y*N+x]=v}
+  const id=fc.getImageData(0,0,N,N),d=id.data,R=parseInt(f.color.slice(1,3),16),G=parseInt(f.color.slice(3,5),16),B=parseInt(f.color.slice(5,7),16);
+  for(let i=0;i<N*N;i++)if(o[i]){d[4*i]=R;d[4*i+1]=G;d[4*i+2]=B;d[4*i+3]=255}
+  fc.putImageData(id,0,0)}
 function pt(e){const r=pad.getBoundingClientRect();return{x:(e.clientX-r.left)*1000/r.width,y:(e.clientY-r.top)*1000/r.height}}
 pad.addEventListener('pointerdown',e=>{if(e.pointerType==='pen')penSeen=true;if(e.pointerType==='touch'&&penSeen)return;if(curStroke)return;
+  if(fillMode){const f={fill:true,...pt(e),color,step};strokes.push(f);doFill(f);return}
   pad.setPointerCapture(e.pointerId);curStroke={id:e.pointerId,color,size,erase,pts:[pt(e)]};drawStroke(curStroke)});
 pad.addEventListener('pointermove',e=>{if(!curStroke||e.pointerId!==curStroke.id)return;
   for(const ev of(e.getCoalescedEvents?e.getCoalescedEvents():[e])){const p=pt(ev),l=curStroke.pts[curStroke.pts.length-1];curStroke.pts.push(p);
@@ -64,11 +78,11 @@ const endS=e=>{if(!curStroke||e.pointerId!==curStroke.id)return;strokes.push(cur
 pad.addEventListener('pointerup',endS);pad.addEventListener('pointercancel',endS);
 pad.addEventListener('contextmenu',e=>e.preventDefault());
 
-function snapshot(){const c=document.createElement('canvas');c.width=c.height=1000;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,1000,1000);x.drawImage(pad,0,0);return c}
+function snapshot(){const c=document.createElement('canvas');c.width=c.height=1000;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,1000,1000);x.drawImage(fillc,0,0);x.drawImage(pad,0,0);return c}
 function finish(){try{speechSynthesis.cancel()}catch(e){}$('#finImg').src=snapshot().toDataURL('image/jpeg',.85);chime(true);show('finish')}
 $('#finBack').onclick=()=>show('draw');
 $('#finHome').onclick=()=>{renderHome();show('home')};
-$('#finLive').onclick=()=>{const r=makeSprite(snapshot(),{sens:5,crop:0,max:640});sprite=r.canvas;spriteScene=animal?animal.scene:'sea';runAnim()};
+$('#finLive').onclick=()=>{const r=makeSprite(snapshot(),{sens:5,crop:0,max:640,flat:true});sprite=r.canvas;spriteScene=animal?animal.scene:'sea';runAnim()};
 $('#finPhoto').onclick=()=>{resetPhoto();show('photo')};
 
 // ---------- Foto ----------

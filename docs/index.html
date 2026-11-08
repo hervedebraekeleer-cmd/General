@@ -31,6 +31,7 @@
   </header>
   <div class="stage" id="stage">
     <div id="board">
+      <canvas id="fillc" width="1000" height="1000"></canvas>
       <svg id="guide" viewBox="0 0 100 100"></svg>
       <canvas id="pad" width="1000" height="1000"></canvas>
     </div>
@@ -46,6 +47,7 @@
         <button class="tool" data-size="8"><i style="--s:8px"></i></button>
         <button class="tool sel" data-size="16"><i style="--s:16px"></i></button>
         <button class="tool" data-size="30"><i style="--s:28px"></i></button>
+        <button class="tool" id="bucket" title="Inkleuren">🪣</button>
         <button class="tool" id="eraser">🧽</button>
         <button class="tool" id="undo">↩️</button>
         <button class="tool" id="clear">🗑️</button>
@@ -62,7 +64,7 @@
     <button class="big pink" id="finPhoto">📷 Foto van mijn papieren tekening</button>
   </div>
   <div class="row center">
-    <button class="big grey" id="finBack">✏️ Verder tekenen</button>
+    <button class="big grey" id="finBack">🎨 Eerst inkleuren</button>
     <button class="big grey" id="finHome">🏠 Menu</button>
   </div>
 </section>
