@@ -37,8 +37,30 @@ magic:{label:'✨ Sprookje',speed:0,manual:true,
   A.acc=(A.acc||0)+dt;if(A.acc>.04){A.acc=0;A.parts.push({k:'star',x:A.x+(Math.random()-.5)*A.w*.7,y:A.y+(Math.random()-.5)*A.h*.7,vx:(Math.random()-.5)*30,vy:20+Math.random()*30,r:4+Math.random()*7,l:.9,m:.9,col:['#ffe14d','#fff','#ff9ee0','#9ee8ff'][Math.random()*4|0]})}}}
 };
 
+
+function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
+// Vervorming van de tekening: f(u,v,t) -> [dx,dy] (fractie van breedte/hoogte); u=0 links, v=0 boven; dier kijkt naar rechts
+const MOVES={
+ swim:{label:'🐟 Zwemmen',f:(u,v,t)=>{const b=1-u,s=Math.sin(t*7-b*4);return[0,s*.11*b*b+s*.01]}},
+ swimV:{label:'🧜 Staart zwaaien',f:(u,v,t)=>{const s=Math.sin(t*5-v*4);return[s*.12*v*v,0]}},
+ flap:{label:'🦋 Fladderen',f:(u,v,t)=>{const s=Math.abs(u-.5)*2;return[0,-Math.sin(t*11)*.17*Math.pow(s,1.4)]}},
+ wing:{label:'🐦 Vleugels',f:(u,v,t)=>{const w=Math.exp(-(Math.pow(u-.42,2)/.05+Math.pow(v-.45,2)/.08));return[0,-Math.sin(t*10)*.2*w]}},
+ walk:{label:'🐾 Lopen',f:(u,v,t)=>{const lw=sm(.6,.9,v),ph=t*7+u*Math.PI*6,tw=sm(.8,1,1-u);return[Math.sin(ph)*.045*lw,-Math.max(0,Math.sin(ph))*.03*lw+Math.sin(t*5)*.04*tw*(1-v*.5)]}},
+ float:{label:'✨ Zweven',f:(u,v,t)=>[Math.sin(t*3+v*5)*.02,Math.sin(t*2.5+u*4)*.015]},
+ wave:{label:'🌈 Golven',f:(u,v,t)=>[0,Math.sin(t*3+u*8)*.035]}
+};
+const SCENE_MOVE={sea:'swim',sky:'flap',meadow:'walk',magic:'float'};
+function warpTri(ctx,img,s0,s1,s2,d0,d1,d2){
+  const cx=(d0[0]+d1[0]+d2[0])/3,cy=(d0[1]+d1[1]+d2[1])/3,g=p=>{const dx=p[0]-cx,dy=p[1]-cy,l=Math.hypot(dx,dy)||1;return[p[0]+dx/l*.7,p[1]+dy/l*.7]};
+  const a0=g(d0),a1=g(d1),a2=g(d2);
+  const sx1=s1[0]-s0[0],sy1=s1[1]-s0[1],sx2=s2[0]-s0[0],sy2=s2[1]-s0[1],det=sx1*sy2-sx2*sy1;if(!det)return;
+  const dx1=d1[0]-d0[0],dy1=d1[1]-d0[1],dx2=d2[0]-d0[0],dy2=d2[1]-d0[1];
+  const a=(dx1*sy2-dx2*sy1)/det,c=(-dx1*sx2+dx2*sx1)/det,b=(dy1*sy2-dy2*sy1)/det,d=(-dy1*sx2+dy2*sx1)/det;
+  ctx.save();ctx.beginPath();ctx.moveTo(a0[0],a0[1]);ctx.lineTo(a1[0],a1[1]);ctx.lineTo(a2[0],a2[1]);ctx.closePath();ctx.clip();
+  ctx.transform(a,b,c,d,d0[0]-a*s0[0]-c*s0[1],d0[1]-b*s0[0]-d*s0[1]);ctx.drawImage(img,0,0);ctx.restore()}
+
 class Anim{
- constructor(cv){this.cv=cv;this.c=cv.getContext('2d');this.parts=[];this.running=false;this.flip=false;this.loop=this.loop.bind(this)}
+ constructor(cv){this.cv=cv;this.c=cv.getContext('2d');this.parts=[];this.running=false;this.flip=false;this.mode='none';this.buf=document.createElement('canvas');this.loop=this.loop.bind(this)}
  start(sprite,scene){this.sprite=sprite;this.setScene(scene);this.parts=[];this.t=0;this.dir=1;this.spin=0;this.resize();this.x=this.W*.3;this.last=performance.now();if(!this.running){this.running=true;requestAnimationFrame(this.loop)}}
  setScene(s){this.scene=s;this.S=SCENES[s];this.parts=[]}
  stop(){this.running=false}
@@ -53,12 +75,23 @@ class Anim{
   S.pose(this,t,dt);if(S.amb)S.amb(this,dt);
   if(this.spin>0)this.spin=Math.max(0,this.spin-dt/.9);
   for(const p of this.parts){p.l-=dt;p.x+=(p.vx||0)*dt;p.y+=p.vy*dt}this.parts=this.parts.filter(p=>p.l>0)}
+ drawSprite(c){const sp=this.sprite,w=this.w,h=this.h,M=MOVES[this.mode];
+  if(!M){c.drawImage(sp,-w/2,-h/2,w,h);return}
+  const pad=.22,bw=w*(1+2*pad),bh=h*(1+2*pad),q=Math.min(2,devicePixelRatio||1),B=this.buf,pw=Math.round(bw*q),ph=Math.round(bh*q);
+  if(B.width!==pw||B.height!==ph){B.width=pw;B.height=ph}
+  const x=B.getContext('2d');x.setTransform(q,0,0,q,0,0);x.clearRect(0,0,bw,bh);x.imageSmoothingQuality='high';
+  const sw=sp.naturalWidth||sp.width,sh=sp.naturalHeight||sp.height,N=14,t=this.t,P=[];
+  for(let j=0;j<=N;j++){P[j]=[];for(let i=0;i<=N;i++){const u=i/N,v=j/N,[dx,dy]=M.f(u,v,t);P[j][i]=[pad*w+u*w+dx*w,pad*h+v*h+dy*h]}}
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){
+    const s=(a,b)=>[a/N*sw,b/N*sh],p00=P[j][i],p10=P[j][i+1],p01=P[j+1][i],p11=P[j+1][i+1];
+    warpTri(x,sp,s(i,j),s(i+1,j),s(i,j+1),p00,p10,p01);warpTri(x,sp,s(i+1,j),s(i+1,j+1),s(i,j+1),p10,p11,p01)}
+  c.drawImage(B,-w/2-pad*w,-h/2-pad*h,bw,bh)}
  draw(){const c=this.c,{W,H,t}=this;this.S.bg(c,W,H,t);
   if(this.S.shadow){c.fillStyle='rgba(0,0,0,.18)';c.beginPath();c.ellipse(this.x,this.gy,this.w*.4,this.h*.07,0,0,TAU);c.fill()}
   c.save();c.translate(this.x,this.y);let rot=this.rot,sc=1;
   if(this.spin>0){const p=1-this.spin;rot+=p*TAU;sc=1+.3*Math.sin(p*Math.PI)}
   c.rotate(rot);c.scale(this.dir*(this.flip?-1:1)*this.sx*sc,this.sy*sc);
-  c.shadowColor='rgba(255,255,255,.9)';c.shadowBlur=8;c.drawImage(this.sprite,-this.w/2,-this.h/2,this.w,this.h);c.restore();
+  c.shadowColor='rgba(255,255,255,.9)';c.shadowBlur=8;this.drawSprite(c);c.restore();
   for(const p of this.parts){const a=Math.max(0,p.l/p.m);c.globalAlpha=a;
    if(p.k==='bub'){c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=2;c.beginPath();c.arc(p.x+Math.sin(p.y*.05)*6,p.y,p.r,0,TAU);c.stroke()}
    else{c.fillStyle=p.col;star(c,p.x,p.y,p.r*(.5+a*.5),t*3)}}

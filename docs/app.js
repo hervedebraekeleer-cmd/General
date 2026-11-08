@@ -1,6 +1,6 @@
 const $=s=>document.querySelector(s);
 const COLORS=['#e53935','#fb8c00','#fdd835','#43a047','#1e88e5','#8e24aa','#ec407a','#6d4c41','#212121'];
-let fillMode=false,animal=null,step=0,strokes=[],curStroke=null,color=COLORS[0],size=16,erase=false,voice=true,penSeen=false,sprite=null,spriteScene='sea',photoImg=null;
+let fillMode=false,animal=null,step=0,strokes=[],curStroke=null,color=COLORS[0],size=16,erase=false,voice=true,penSeen=false,sprite=null,live=null,moveMode='float',moveFromAnimal=true,spriteScene='sea',photoImg=null;
 const pad=$('#pad'),pc=pad.getContext('2d'),fillc=$('#fillc'),fc=fillc.getContext('2d',{willReadFrequently:true}),anim=new Anim($('#stageCv'));
 
 function show(id){document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('active',e.id===id));if(id!=='anim')anim.stop();requestAnimationFrame(fit)}
@@ -21,7 +21,7 @@ $('#gallery').onclick=e=>{
   const del=e.target.closest('[data-del]');
   if(del){if(confirm('Deze tekening weggooien?')){saveGallery(loadGallery().filter(x=>x.id!=del.dataset.del));renderHome()}return}
   const t=e.target.closest('[data-id]');if(!t)return;const it=loadGallery().find(x=>x.id==t.dataset.id);if(!it)return;
-  const im=new Image();im.onload=()=>{sprite=im;spriteScene=it.scene;runAnim()};im.src=it.img};
+  const im=new Image();im.onload=()=>{spriteScene=it.scene;runAnim(im,it.move||SCENE_MOVE[it.scene])};im.src=it.img};
 function loadGallery(){try{return JSON.parse(localStorage.getItem('kd_gallery')||'[]')}catch(e){return[]}}
 function saveGallery(a){try{localStorage.setItem('kd_gallery',JSON.stringify(a));return true}catch(e){return false}}
 
@@ -82,7 +82,7 @@ function snapshot(){const c=document.createElement('canvas');c.width=c.height=10
 function finish(){try{speechSynthesis.cancel()}catch(e){}$('#finImg').src=snapshot().toDataURL('image/jpeg',.85);chime(true);show('finish')}
 $('#finBack').onclick=()=>show('draw');
 $('#finHome').onclick=()=>{renderHome();show('home')};
-$('#finLive').onclick=()=>{const r=makeSprite(snapshot(),{sens:5,crop:0,max:640,flat:true});sprite=r.canvas;spriteScene=animal?animal.scene:'sea';runAnim()};
+$('#finLive').onclick=()=>{const r=makeSprite(snapshot(),{sens:5,crop:0,max:640,flat:true});spriteScene=animal?animal.scene:'sea';runAnim(orient(r.canvas),animal?animal.move:null)};
 $('#finPhoto').onclick=()=>{resetPhoto();show('photo')};
 
 // ---------- Foto ----------
@@ -96,20 +96,22 @@ let pt_;function processPhoto(){if(!photoImg)return;clearTimeout(pt_);pt_=setTim
   const c=$('#prev2');c.width=sprite.width;c.height=sprite.height;c.getContext('2d').drawImage(sprite,0,0);
   $('#emptyMsg').hidden=true;$('#photoLive').disabled=false;$('#tip').hidden=!r.leaked},30)}
 $('#sens').oninput=$('#crop').oninput=processPhoto;
-$('#photoLive').onclick=()=>{spriteScene=animal?animal.scene:(spriteScene||'sea');runAnim()};
+$('#photoLive').onclick=()=>{spriteScene=animal?animal.scene:(spriteScene||'sea');runAnim(orient(sprite),animal?animal.move:null)};
 
 // ---------- Animatie ----------
-function runAnim(){
+function orient(src){if(!animal||animal.face!==-1)return src;const c=document.createElement('canvas');c.width=src.width;c.height=src.height;const x=c.getContext('2d');x.translate(c.width,0);x.scale(-1,1);x.drawImage(src,0,0);return c}
+function runAnim(src,mode){live=src;moveFromAnimal=!!mode;moveMode=mode||SCENE_MOVE[spriteScene]||'float';anim.mode=moveMode;
   $('#sceneBtns').innerHTML=Object.entries(SCENES).map(([k,v])=>`<button data-s="${k}" class="${k===spriteScene?'sel':''}">${v.label}</button>`).join('');
-  show('anim');requestAnimationFrame(()=>{anim.flip=false;anim.start(sprite,spriteScene)});chime(true)}
-$('#sceneBtns').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;spriteScene=b.dataset.s;anim.setScene(spriteScene);
+  show('anim');requestAnimationFrame(()=>{anim.flip=false;anim.start(live,spriteScene)});chime(true)}
+$('#sceneBtns').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;spriteScene=b.dataset.s;anim.setScene(spriteScene);if(!moveFromAnimal){moveMode=SCENE_MOVE[spriteScene];anim.mode=moveMode}
   document.querySelectorAll('#sceneBtns button').forEach(x=>x.classList.toggle('sel',x===b))};
 $('#animBack').onclick=()=>{renderHome();show('home')};
+$('#move').onclick=()=>{const k=Object.keys(MOVES);moveMode=k[(k.indexOf(moveMode)+1)%k.length];moveFromAnimal=true;anim.mode=moveMode;toast(MOVES[moveMode].label)};
 $('#flip').onclick=()=>{anim.flip=!anim.flip};
 $('#stageCv').addEventListener('pointerdown',e=>{const r=e.target.getBoundingClientRect();anim.tap(e.clientX-r.left,e.clientY-r.top)});
-$('#save').onclick=()=>{const g=loadGallery();g.unshift({id:Date.now(),img:(sprite.toDataURL?sprite:spriteToCanvas()).toDataURL('image/png'),scene:spriteScene});
+$('#save').onclick=()=>{const g=loadGallery();g.unshift({id:Date.now(),img:(live.toDataURL?live:spriteToCanvas()).toDataURL('image/png'),scene:spriteScene,move:moveMode});
   if(!saveGallery(g.slice(0,12)))toast('Geen plaats meer');else toast('Bewaard! ⭐')};
-function spriteToCanvas(){const c=document.createElement('canvas');c.width=sprite.naturalWidth;c.height=sprite.naturalHeight;c.getContext('2d').drawImage(sprite,0,0);return c}
+function spriteToCanvas(){const c=document.createElement('canvas');c.width=live.naturalWidth;c.height=live.naturalHeight;c.getContext('2d').drawImage(live,0,0);return c}
 $('#rec').onclick=()=>{
   if(!window.MediaRecorder)return toast('Filmpje niet mogelijk op dit toestel');
   const cv=$('#stageCv'),bar=document.querySelector('.bar');const mt=['video/webm;codecs=vp9','video/webm','video/mp4'].find(t=>MediaRecorder.isTypeSupported(t));
