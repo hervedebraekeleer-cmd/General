@@ -44,4 +44,50 @@ const ANIMALS=[
  {t:'Teken twee armen. Een arm houdt een toverstokje vast.',p:['M47 40L32 54','M53 40L70 52','M70 52L86 40']},
  {t:'Teken een sterretje op het toverstokje!',p:[STAR(90,31,7)]},
  {t:'Teken twee beentjes met schoentjes.',p:['M44 70V86H38','M56 70V86H62']}]}
+,{id:'kat',name:'Kat',emoji:'🐱',scene:'meadow',steps:[
+ {t:'Teken een grote ronde ovaal. Dat is het hoofd van de kat.',p:[E(50,36,22,19)]},
+ {t:'Teken twee puntige oren bovenop.',p:['M32 24L30 8L44 18','M68 24L70 8L56 18']},
+ {t:'Teken twee ogen en een klein neusje.',p:[C(42,34,3),C(58,34,3),'M47 41L53 41L50 45Z']},
+ {t:'Teken de mond en zes snorharen.',p:['M50 45Q46 50 42 47','M50 45Q54 50 58 47','M30 40L16 37','M30 45L16 47','M70 40L84 37','M70 45L84 47']},
+ {t:'Teken het lijf onder het hoofd.',p:['M36 54C26 70 26 92 40 94H60C74 92 74 70 64 54']},
+ {t:'Teken een lange krullende staart.',p:['M72 86C92 86 92 62 82 58']},
+ {t:'Teken drie streepjes op het voorhoofd.',p:['M50 18V25','M43 19L44 25','M57 19L56 25']}]},
+{id:'vlinder',name:'Vlinder',emoji:'🦋',scene:'sky',steps:[
+ {t:'Teken een lang smal ovaaltje in het midden. Dat is het lijfje.',p:[E(50,50,3.5,20)]},
+ {t:'Teken twee grote vleugels bovenaan.',p:['M47 42C30 10 6 20 12 42C14 52 36 52 47 46','M53 42C70 10 94 20 88 42C86 52 64 52 53 46']},
+ {t:'Teken twee kleinere vleugels onderaan.',p:['M47 52C30 54 14 64 22 80C30 90 44 76 47 60','M53 52C70 54 86 64 78 80C70 90 56 76 53 60']},
+ {t:'Teken een klein rond hoofdje met twee voelsprieten.',p:[C(50,29,4.5),'M48 26Q42 16 34 12','M52 26Q58 16 66 12']},
+ {t:'Teken stippen op de vleugels!',p:[C(26,32,5),C(74,32,5),C(30,70,4),C(70,70,4)]}]},
+{id:'konijn',name:'Konijn',emoji:'🐰',scene:'meadow',steps:[
+ {t:'Teken een brede ovaal. Dat is het hoofd van het konijn.',p:[E(50,50,20,17)]},
+ {t:'Teken twee heel lange oren.',p:[E(40,20,6,16),E(60,20,6,16)]},
+ {t:'Teken twee ogen, een neusje en een mondje.',p:[C(43,47,2.5),C(57,47,2.5),'M47 54L53 54L50 58Z','M50 58V61','M50 61Q46 64 43 62','M50 61Q54 64 57 62']},
+ {t:'Teken snorharen.',p:['M30 54L16 52','M30 58L16 60','M70 54L84 52','M70 58L84 60']},
+ {t:'Teken een dik ovaal lijf onder het hoofd.',p:[E(50,80,22,16)]},
+ {t:'Teken twee voetjes.',p:[E(38,93,8,4),E(62,93,8,4)]}]},
+{id:'schildpad',name:'Schildpad',emoji:'🐢',scene:'sea',steps:[
+ {t:'Teken een halve bol. Dat is het harde schild.',p:['M20 62C20 28 80 28 80 62Z']},
+ {t:'Teken een patroon op het schild.',p:['M50 33L42 46L58 46Z','M42 46L36 62','M58 46L64 62']},
+ {t:'Teken een rond hoofd links.',p:[C(14,56,9)]},
+ {t:'Teken een oog en een lachende mond.',p:[C(11,54,1.6),'M7 60Q11 63 15 60']},
+ {t:'Teken twee dikke pootjes.',p:['M30 62V74H40V62','M62 62V74H72V62']},
+ {t:'Teken een klein staartje.',p:['M80 60L90 62L80 66']}]},
+{id:'zeemeermin',name:'Zeemeermin',emoji:'🧜‍♀️',scene:'sea',steps:[
+ {t:'Teken een cirkel bovenaan. Dat is het hoofd.',p:[C(50,18,9)]},
+ {t:'Teken lang, golvend haar.',p:['M41 18Q38 8 50 8Q62 8 59 18','M41 18Q34 36 40 50','M59 18Q66 36 60 50']},
+ {t:'Teken twee ogen en een lachende mond.',p:[C(46,17,1.2),C(54,17,1.2),'M46 21Q50 24 54 21']},
+ {t:'Teken het lijf en twee armen.',p:['M44 28C42 40 44 46 46 54H54C56 46 58 40 56 28Z','M44 31L32 44','M56 31L68 44']},
+ {t:'Teken schelpen als bovenstukje.',p:['M44 36Q47 42 50 36Q53 42 56 36']},
+ {t:'Teken een lange visstaart.',p:['M46 54C42 66 46 78 50 86C54 78 58 66 54 54']},
+ {t:'Teken de staartvin onderaan.',p:['M50 86L34 98L48 94L50 98L52 94L66 98Z']},
+ {t:'Teken luchtbelletjes in het water!',p:[C(78,40,3),C(84,30,4),C(74,24,2.5)]}]},
+{id:'uil',name:'Uil',emoji:'🦉',scene:'magic',steps:[
+ {t:'Teken een grote ovaal. Dat is het lijf van de uil.',p:[E(50,55,28,34)]},
+ {t:'Teken twee puntige oortjes bovenaan.',p:['M28 28L24 12L40 22','M72 28L76 12L60 22']},
+ {t:'Teken twee grote ronde ogen.',p:[C(38,42,10),C(62,42,10)]},
+ {t:'Teken zwarte pupillen in de ogen.',p:[C(38,42,4),C(62,42,4)]},
+ {t:'Teken een kleine snavel: een driehoekje.',p:['M45 52L55 52L50 62Z']},
+ {t:'Teken twee vleugels opzij.',p:['M24 52C14 66 20 82 32 84','M76 52C86 66 80 82 68 84']},
+ {t:'Teken veertjes op de buik.',p:['M40 70q5 5 10 0q5 5 10 0','M40 78q5 5 10 0q5 5 10 0']},
+ {t:'Teken twee pootjes.',p:['M43 89V96','M57 89V96']}]}
 ];
