@@ -90,4 +90,49 @@ const ANIMALS=[
  {t:'Teken twee vleugels opzij.',p:['M24 52C14 66 20 82 32 84','M76 52C86 66 80 82 68 84']},
  {t:'Teken veertjes op de buik.',p:['M40 70q5 5 10 0q5 5 10 0','M40 78q5 5 10 0q5 5 10 0']},
  {t:'Teken twee pootjes.',p:['M43 89V96','M57 89V96']}]}
+,{id:'draak',name:'Draak',emoji:'🐉',scene:'sky',steps:[
+ {t:'Teken een grote ovaal. Dat is het lijf van de draak.',p:[E(45,62,26,16)]},
+ {t:'Teken twee schuine lijnen omhoog voor de nek, en een ovaal voor het hoofd.',p:['M58 50L70 36','M68 62L82 42',E(80,32,12,8)]},
+ {t:'Teken twee hoorntjes en een oog.',p:['M74 25L72 14L80 23','M84 24L88 13L90 26',C(84,31,2)]},
+ {t:'Teken vuur uit de neus!',p:['M92 33L99 29L96 35L100 39L93 38']},
+ {t:'Teken een grote vleugel met punten.',p:['M34 50L28 24L42 34L48 18L56 36L52 50']},
+ {t:'Teken twee poten.',p:['M30 74V90H40V76','M54 76V90H64V74']},
+ {t:'Teken een lange staart met een puntje.',p:['M20 60C6 62 4 78 8 88L14 80L18 90L24 72']},
+ {t:'Teken puntjes op de rug.',p:['M30 48L34 41L38 47','M40 47L44 40L48 46']}]},
+{id:'pinguin',name:'Pinguïn',emoji:'🐧',scene:'sea',steps:[
+ {t:'Teken een grote ovaal. Dat is het lijf van de pinguïn.',p:[E(50,62,26,30)]},
+ {t:'Teken een ronde cirkel bovenaan. Dat is het hoofd.',p:[C(50,28,15)]},
+ {t:'Teken een witte buik: een kleinere ovaal in het lijf.',p:[E(50,68,16,22)]},
+ {t:'Teken twee ogen en een snaveltje.',p:[C(44,26,2.5),C(56,26,2.5),'M44 32L56 32L50 40Z']},
+ {t:'Teken twee vleugels opzij.',p:['M24 52C14 64 18 78 28 80','M76 52C86 64 82 78 72 80']},
+ {t:'Teken twee platte voetjes.',p:['M34 93L44 93L39 98Z','M56 93L66 93L61 98Z']}]},
+{id:'regenboog',name:'Regenboog',emoji:'🌈',scene:'magic',steps:[
+ {t:'Teken een grote boog. Dat is de buitenste kleur.',p:['M10 80A40 40 0 0 1 90 80']},
+ {t:'Teken een tweede boog net onder de eerste.',p:['M18 80A32 32 0 0 1 82 80']},
+ {t:'Teken een derde boog.',p:['M26 80A24 24 0 0 1 74 80']},
+ {t:'Teken een kleine vierde boog binnenin.',p:['M34 80A16 16 0 0 1 66 80']},
+ {t:'Teken aan elk eind van de regenboog een wolkje.',p:['M8 90C4 82 14 76 20 80C22 72 34 72 36 80C42 80 44 90 36 90Z','M64 90C60 82 70 76 76 80C78 72 90 72 92 80C98 80 100 90 92 90Z']},
+ {t:'Teken een zon met stralen.',p:[C(50,18,7),...Array.from({length:8},(_,i)=>{const a=i*Math.PI/4,f=(r)=>`${(50+Math.cos(a)*r).toFixed(1)} ${(18+Math.sin(a)*r).toFixed(1)}`;return `M${f(10)}L${f(15)}`})]}]},
+{id:'kasteel',name:'Kasteel',emoji:'🏰',scene:'magic',steps:[
+ {t:'Teken een grote rechthoek. Dat is het midden van het kasteel.',p:['M28 90V46H72V90Z']},
+ {t:'Teken links en rechts een smalle toren.',p:['M12 90V58H28','M72 58H88V90','M12 90H28','M72 90H88']},
+ {t:'Teken drie puntdaken.',p:['M8 58L20 36L32 58','M68 58L80 36L92 58','M24 46L50 16L76 46']},
+ {t:'Teken een deur met een ronde boog.',p:['M42 90V74Q50 62 58 74V90']},
+ {t:'Teken drie ramen.',p:[C(20,70,2.5),C(80,70,2.5),C(50,54,4)]},
+ {t:'Teken een vlag bovenaan!',p:['M50 16V4L60 8L50 12']}]},
+{id:'giraf',name:'Giraf',emoji:'🦒',scene:'meadow',steps:[
+ {t:'Teken een ovaal. Dat is het lijf van de giraf.',p:[E(42,66,24,14)]},
+ {t:'Teken een heel lange nek: twee schuine lijnen omhoog.',p:['M54 56L62 24','M66 60L76 24']},
+ {t:'Teken een ovaal hoofd bovenaan.',p:[E(72,18,10,7)]},
+ {t:'Teken twee hoorntjes, een oor en een oog.',p:['M68 11L67 3','M76 11L77 3','M63 17L56 14L62 21',C(75,17,1.5)]},
+ {t:'Teken vier lange poten.',p:['M26 76V98H31V78','M34 78V96H39V79','M50 78V98H55V77','M58 74V96H63V72']},
+ {t:'Teken een staartje.',p:['M18 62Q10 66 12 78']},
+ {t:'Teken vlekken op het lijf en de nek!',p:[C(36,64,3),C(48,70,3),C(40,74,2.5),C(64,38,2.5),C(62,48,2.5)]}]},
+{id:'dolfijn',name:'Dolfijn',emoji:'🐬',scene:'sea',steps:[
+ {t:'Teken een lange, gebogen vorm met een puntige snuit. Dat is de dolfijn.',p:['M6 62C14 34 56 24 80 38L97 44L82 49C70 56 62 70 48 74C32 80 14 76 6 62Z']},
+ {t:'Teken een rugvin bovenop.',p:['M42 36L38 21L58 33']},
+ {t:'Teken de staart: twee puntjes links.',p:['M7 63L0 50L13 58','M7 63L0 78L13 70']},
+ {t:'Teken een vin onder het lijf.',p:['M50 70L44 86L62 74']},
+ {t:'Teken een oog en een lach.',p:[C(76,40,1.8),'M82 47Q90 48 96 45']},
+ {t:'Teken golven onder de dolfijn.',p:['M10 94Q20 86 30 94T50 94T70 94T90 94']}]}
 ];
