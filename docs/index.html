@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#7c4dff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Teken & Leef</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section id="home" class="screen active">
+  <h1>🎨 Teken &amp; Leef</h1>
+  <p class="sub">Kies een dier en leer het tekenen!</p>
+  <div id="animals" class="grid"></div>
+  <button id="photoHome" class="big pink">📷 Foto van mijn tekening laten leven</button>
+  <div id="galleryBox" hidden>
+    <h2>⭐ Mijn tekeningen</h2>
+    <div id="gallery" class="grid thumbs"></div>
+  </div>
+</section>
+
+<section id="draw" class="screen">
+  <header>
+    <button class="round" id="drawBack">←</button>
+    <h2 id="drawTitle"></h2>
+    <span id="stepNo" class="pill"></span>
+  </header>
+  <div class="stage" id="stage">
+    <div id="board">
+      <svg id="guide" viewBox="0 0 100 100"></svg>
+      <canvas id="pad" width="1000" height="1000"></canvas>
+    </div>
+    <aside id="side">
+      <div class="bubble"><p id="instr"></p><button class="round small" id="speak" title="Voorlezen">🔊</button></div>
+      <div class="dots" id="dots"></div>
+      <div class="row">
+        <button class="big grey" id="prev">◀ Vorige</button>
+        <button class="big green" id="next">Volgende ▶</button>
+      </div>
+      <div class="palette" id="palette"></div>
+      <div class="row tools">
+        <button class="tool" data-size="8"><i style="--s:8px"></i></button>
+        <button class="tool sel" data-size="16"><i style="--s:16px"></i></button>
+        <button class="tool" data-size="30"><i style="--s:28px"></i></button>
+        <button class="tool" id="eraser">🧽</button>
+        <button class="tool" id="undo">↩️</button>
+        <button class="tool" id="clear">🗑️</button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="finish" class="screen">
+  <h1>🎉 Mooi gedaan!</h1>
+  <img id="finImg" alt="">
+  <div class="row center">
+    <button class="big purple" id="finLive">✨ Laat mijn tekening leven</button>
+    <button class="big pink" id="finPhoto">📷 Foto van mijn papieren tekening</button>
+  </div>
+  <div class="row center">
+    <button class="big grey" id="finBack">✏️ Verder tekenen</button>
+    <button class="big grey" id="finHome">🏠 Menu</button>
+  </div>
+</section>
+
+<section id="photo" class="screen">
+  <header>
+    <button class="round" id="photoBack">←</button>
+    <h2>📷 Foto van je tekening</h2>
+  </header>
+  <div class="photoWrap">
+    <div class="preview" id="previewBox"><canvas id="prev2"></canvas><p id="emptyMsg">Leg je tekening op tafel, houd de tablet erboven en neem een foto.</p></div>
+    <div class="photoCtl">
+      <div class="row">
+        <button class="big pink" id="btnCam">📷 Foto nemen</button>
+        <button class="big grey" id="btnPick">🖼️ Kies foto</button>
+      </div>
+      <label>Gevoeligheid <input type="range" id="sens" min="1" max="10" value="5"></label>
+      <label>Rand afsnijden <input type="range" id="crop" min="0" max="25" value="4"></label>
+      <p id="tip" class="tip" hidden>Tip: schuif “Rand afsnijden” hoger tot de tafel weg is, en zorg dat de lijn van de tekening dicht is.</p>
+      <button class="big purple" id="photoLive" disabled>✨ Laat leven!</button>
+    </div>
+  </div>
+  <input type="file" id="fileCam" accept="image/*" capture="environment" hidden>
+  <input type="file" id="filePick" accept="image/*" hidden>
+</section>
+
+<section id="anim" class="screen">
+  <canvas id="stageCv"></canvas>
+  <div class="bar">
+    <button class="round" id="animBack">←</button>
+    <div id="sceneBtns"></div>
+    <button class="round" id="flip" title="Andere kant op">↔️</button>
+    <button class="round" id="save" title="Bewaar">💾</button>
+    <button class="round" id="rec" title="Filmpje">🎥</button>
+  </div>
+</section>
+
+<div id="toast"></div>
+<script src="animals.js"></script>
+<script src="cutout.js"></script>
+<script src="scenes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
