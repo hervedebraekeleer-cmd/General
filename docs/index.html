@@ -14,7 +14,8 @@
 
 <section id="home" class="screen active">
   <h1>🎨 Teken &amp; Leef</h1>
-  <p class="sub">Kies een dier en leer het tekenen!</p>
+  <div class="seg"><button data-m="tablet" class="on">✏️ Op de tablet</button><button data-m="paper">📄 Op papier</button></div>
+  <p class="sub" id="homeSub">Kies een dier en teken het op de tablet!</p>
   <div id="animals" class="grid"></div>
   <button id="photoHome" class="big pink">📷 Foto van mijn tekening laten leven</button>
   <div id="galleryBox" hidden>
@@ -56,6 +57,27 @@
   </div>
 </section>
 
+<section id="paper" class="screen">
+  <header>
+    <button class="round" id="pBack">←</button>
+    <h2 id="pTitle"></h2>
+    <span id="pStepNo" class="pill"></span>
+  </header>
+  <div class="stage" id="pstage">
+    <div id="pboard"><svg id="pguide" viewBox="0 0 100 100"></svg></div>
+    <aside>
+      <div class="tip">✏️ Pak een potlood, een gum en een blad papier. Teken eerst heel zacht!</div>
+      <div class="bubble"><p id="pInstr"></p><button class="round small" id="pSpeak" title="Voorlezen">🔊</button></div>
+      <div class="dots" id="pDots"></div>
+      <div class="row">
+        <button class="big grey" id="pPrev">◀ Vorige</button>
+        <button class="big green" id="pNext">Volgende ▶</button>
+      </div>
+      <button class="big pink" id="pPhoto">📷 Foto van mijn tekening</button>
+    </aside>
+  </div>
+</section>
+
 <section id="finish" class="screen">
   <h1>🎉 Mooi gedaan!</h1>
   <img id="finImg" alt="">
@@ -83,6 +105,7 @@
       </div>
       <label>Gevoeligheid <input type="range" id="sens" min="1" max="10" value="5"></label>
       <label>Rand afsnijden <input type="range" id="crop" min="0" max="25" value="4"></label>
+      <p class="tip small">Leg het papier vlak, met goed licht. Zorg dat er geen tafel of hand op de foto staat.</p>
       <p id="tip" class="tip" hidden>Tip: schuif “Rand afsnijden” hoger tot de tafel weg is, en zorg dat de lijn van de tekening dicht is.</p>
       <button class="big purple" id="photoLive" disabled>✨ Laat leven!</button>
     </div>

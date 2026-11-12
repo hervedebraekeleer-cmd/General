@@ -60,4 +60,22 @@ header h2{flex:1;color:var(--p);font-size:1.6rem}
 #sceneBtns button.sel{background:var(--pink);color:#fff}
 #toast{position:fixed;left:50%;top:20px;transform:translateX(-50%) translateY(-120px);background:#333;color:#fff;padding:12px 22px;border-radius:24px;transition:.3s;z-index:9;font-size:1.1rem}
 #toast.show{transform:translateX(-50%) translateY(0)}
-@media (orientation:portrait){.stage,.photoWrap{flex-direction:column}#side{min-width:0;flex:none}}
+@media (orientation:portrait){.stage,.photoWrap{flex-direction:column}#side,#paper aside{min-width:0;flex:none}}
+
+.seg{display:flex;gap:8px;justify-content:center;margin:4px 0 8px}
+.seg button{background:#fff;color:var(--p);padding:12px 20px;font-weight:700;font-size:1.1rem;box-shadow:0 3px 0 #e0d5f7}
+.seg button.on{background:var(--p);color:#fff}
+.tip.small{font-size:.95rem;padding:8px 12px;background:#e8f7ff}
+#side .tip,#paper .tip{background:#fff3cd;padding:10px 14px;border-radius:14px;margin:0;font-size:1.05rem}
+#pboard{position:relative;background:#fff;border-radius:20px;box-shadow:0 5px 0 #e0d5f7;overflow:hidden;flex:none}
+#pguide{position:absolute;inset:0;width:100%;height:100%}
+#paper aside{flex:1;display:flex;flex-direction:column;gap:12px;min-width:240px;overflow:auto}
+.dots i.sh{background:#ffd9a8}.dots i.sh.on{background:#ff9800}
+#pguide .ink{fill:none;stroke:#555;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+#pguide .cur{fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1;animation:drawIn 3s ease-in-out infinite}
+@keyframes drawIn{0%{stroke-dashoffset:1}55%,100%{stroke-dashoffset:0}}
+#pguide .startdot{fill:#ff4f9a;stroke:#fff;stroke-width:.6;animation:pulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{50%{transform:scale(1.5)}}
+#pguide .hl{fill:none;stroke:#333;stroke-width:.55;stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:1;animation:hl .35s ease-out forwards}
+@keyframes hl{to{stroke-dashoffset:0}}
+#pguide .hs{fill:none;stroke:#333;stroke-width:.55;stroke-linecap:round}

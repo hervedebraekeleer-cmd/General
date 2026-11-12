@@ -35,7 +35,7 @@ const ANIMALS=[
  {t:'Teken vier poten.',p:['M24 70V90H30V72','M34 72V90H40V73','M52 72V90H58V72','M60 68V90H66V66']},
  {t:'Teken een krullende staart.',p:['M16 52C4 52 4 66 10 76C12 66 18 64 19 60']},
  {t:'Teken een magische ster op het lijf!',p:[STAR(42,56,8)]}]},
-{id:'fee',move:'flap',name:'Fee',emoji:'🧚',scene:'magic',steps:[
+{id:'fee',sh:[3,0],move:'flap',name:'Fee',emoji:'🧚',scene:'magic',steps:[
  {t:'Teken een cirkel bovenaan. Dat is het hoofd van de fee.',p:[C(50,20,9)]},
  {t:'Teken haar en een kroontje.',p:['M41 21Q40 7 50 8Q60 7 59 21','M59 21Q68 28 62 38','M43 8L45 2L48 6L50 0L52 6L55 2L57 8']},
  {t:'Teken een oog, nog een oog en een lachende mond.',p:[C(46,19,1.2),C(54,19,1.2),'M46 23Q50 26 54 23']},
@@ -44,7 +44,7 @@ const ANIMALS=[
  {t:'Teken twee armen. Een arm houdt een toverstokje vast.',p:['M47 40L32 54','M53 40L70 52','M70 52L86 40']},
  {t:'Teken een sterretje op het toverstokje!',p:[STAR(90,31,7)]},
  {t:'Teken twee beentjes met schoentjes.',p:['M44 70V86H38','M56 70V86H62']}]}
-,{id:'kat',move:'walk',name:'Kat',emoji:'🐱',scene:'meadow',steps:[
+,{id:'kat',sh:[4,0],move:'walk',name:'Kat',emoji:'🐱',scene:'meadow',steps:[
  {t:'Teken een grote ronde ovaal. Dat is het hoofd van de kat.',p:[E(50,36,22,19)]},
  {t:'Teken twee puntige oren bovenop.',p:['M32 24L30 8L44 18','M68 24L70 8L56 18']},
  {t:'Teken twee ogen en een klein neusje.',p:[C(42,34,3),C(58,34,3),'M47 41L53 41L50 45Z']},
@@ -52,13 +52,13 @@ const ANIMALS=[
  {t:'Teken het lijf onder het hoofd.',p:['M36 54C26 70 26 92 40 94H60C74 92 74 70 64 54']},
  {t:'Teken een lange krullende staart.',p:['M72 86C92 86 92 62 82 58']},
  {t:'Teken drie streepjes op het voorhoofd.',p:['M50 18V25','M43 19L44 25','M57 19L56 25']}]},
-{id:'vlinder',move:'flap',name:'Vlinder',emoji:'🦋',scene:'sky',steps:[
+{id:'vlinder',sh:[1,0],move:'flap',name:'Vlinder',emoji:'🦋',scene:'sky',steps:[
  {t:'Teken een lang smal ovaaltje in het midden. Dat is het lijfje.',p:[E(50,50,3.5,20)]},
  {t:'Teken twee grote vleugels bovenaan.',p:['M47 42C30 10 6 20 12 42C14 52 36 52 47 46','M53 42C70 10 94 20 88 42C86 52 64 52 53 46']},
  {t:'Teken twee kleinere vleugels onderaan.',p:['M47 52C30 54 14 64 22 80C30 90 44 76 47 60','M53 52C70 54 86 64 78 80C70 90 56 76 53 60']},
  {t:'Teken een klein rond hoofdje met twee voelsprieten.',p:[C(50,29,4.5),'M48 26Q42 16 34 12','M52 26Q58 16 66 12']},
  {t:'Teken stippen op de vleugels!',p:[C(26,32,5),C(74,32,5),C(30,70,4),C(70,70,4)]}]},
-{id:'konijn',move:'walk',name:'Konijn',emoji:'🐰',scene:'meadow',steps:[
+{id:'konijn',sh:[4,0],move:'walk',name:'Konijn',emoji:'🐰',scene:'meadow',steps:[
  {t:'Teken een brede ovaal. Dat is het hoofd van het konijn.',p:[E(50,50,20,17)]},
  {t:'Teken twee heel lange oren.',p:[E(40,20,6,16),E(60,20,6,16)]},
  {t:'Teken twee ogen, een neusje en een mondje.',p:[C(43,47,2.5),C(57,47,2.5),'M47 54L53 54L50 58Z','M50 58V61','M50 61Q46 64 43 62','M50 61Q54 64 57 62']},
@@ -72,7 +72,7 @@ const ANIMALS=[
  {t:'Teken een oog en een lachende mond.',p:[C(11,54,1.6),'M7 60Q11 63 15 60']},
  {t:'Teken twee dikke pootjes.',p:['M30 62V74H40V62','M62 62V74H72V62']},
  {t:'Teken een klein staartje.',p:['M80 60L90 62L80 66']}]},
-{id:'zeemeermin',move:'swimV',name:'Zeemeermin',emoji:'🧜‍♀️',scene:'sea',steps:[
+{id:'zeemeermin',sh:[5,0],move:'swimV',name:'Zeemeermin',emoji:'🧜‍♀️',scene:'sea',steps:[
  {t:'Teken een cirkel bovenaan. Dat is het hoofd.',p:[C(50,18,9)]},
  {t:'Teken lang, golvend haar.',p:['M41 18Q38 8 50 8Q62 8 59 18','M41 18Q34 36 40 50','M59 18Q66 36 60 50']},
  {t:'Teken twee ogen en een lachende mond.',p:[C(46,17,1.2),C(54,17,1.2),'M46 21Q50 24 54 21']},
@@ -106,7 +106,7 @@ const ANIMALS=[
  {t:'Teken twee ogen en een snaveltje.',p:[C(44,26,2.5),C(56,26,2.5),'M44 32L56 32L50 40Z']},
  {t:'Teken twee vleugels opzij.',p:['M24 52C14 64 18 78 28 80','M76 52C86 64 82 78 72 80']},
  {t:'Teken twee platte voetjes.',p:['M34 93L44 93L39 98Z','M56 93L66 93L61 98Z']}]},
-{id:'regenboog',move:'wave',name:'Regenboog',emoji:'🌈',scene:'magic',steps:[
+{id:'regenboog',sh:[4,0],move:'wave',name:'Regenboog',emoji:'🌈',scene:'magic',steps:[
  {t:'Teken een grote boog. Dat is de buitenste kleur.',p:['M10 80A40 40 0 0 1 90 80']},
  {t:'Teken een tweede boog net onder de eerste.',p:['M18 80A32 32 0 0 1 82 80']},
  {t:'Teken een derde boog.',p:['M26 80A24 24 0 0 1 74 80']},
